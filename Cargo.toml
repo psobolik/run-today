@@ -1,0 +1,17 @@
+[package]
+name = "run-today"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = { version = "0.4.31", features = ["serde"] }
+colored = "2.0.4"
+directories = "5.0.1"
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json5 = "0.1.0"
+
+[dependencies.clap]
+version = "4.4"
+features = ["derive"]
