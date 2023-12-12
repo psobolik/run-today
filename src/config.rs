@@ -27,6 +27,7 @@ pub fn load_programs() -> Vec<Program> {
 }
 pub fn store_programs(programs: &[Program]) -> Result<(), Error> {
     if let Some(config_path) = config_path() {
+        std::fs::create_dir_all(&config_path)?;
         programs::store(programs, &config_path)
     } else {
         Err(Error::new(
@@ -45,6 +46,7 @@ pub fn load_last_run() -> Option<DateTime<Local>> {
 }
 pub fn store_last_run(last_run: &Option<DateTime<Local>>) -> Result<(), Error> {
     if let Some(config_path) = config_path() {
+        std::fs::create_dir_all(&config_path)?;
         last_run::store(last_run, &config_path)
     } else {
         Err(Error::new(
