@@ -3,12 +3,13 @@
  * Created 2023-12-09
  */
 
-use crate::config::program::Program;
-use crate::{config, format_last_run};
+use crate::app_command::last_run::format_last_run;
+use crate::config::{self, program::Program};
+use crate::{print_error, print_info};
 use chrono::{DateTime, Datelike, Local};
 use colored::Colorize;
 
-pub fn do_it(no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
+pub fn run(no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
     // Returns 0 if no errors
     // 1 if the last run can't be stored
     // 2 + the number of programs that failed, if any failed
@@ -16,13 +17,13 @@ pub fn do_it(no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
 
     let last_run = config::load_last_run();
     if verbose {
-        crate::print_info!("Last run: {}", format_last_run(last_run));
+        print_info!("Last run: {}", format_last_run(last_run));
     }
     if should_run(last_run) {
         exit_code = run_programs(&config::load_programs(), no_stdout, no_stderr, verbose);
         exit_code += update_last_run();
     } else if verbose {
-        crate::print_info!("Doing nothing (already run today)");
+        print_info!("Doing nothing (already run today)");
     }
     exit_code
 }
@@ -51,7 +52,7 @@ fn run_programs(programs: &Vec<Program>, no_stdout: bool, no_stderr: bool, verbo
         let mut exit_code = 0;
 
         if verbose {
-            crate::print_info!("Running {}", program.to_string().italic());
+            print_info!("Running {}", program.to_string().italic());
         }
 
         let mut process_command = std::process::Command::new(program.name());
@@ -76,7 +77,7 @@ fn run_programs(programs: &Vec<Program>, no_stdout: bool, no_stderr: bool, verbo
             }
             Err(error) => {
                 if verbose {
-                    crate::print_error!(
+                    print_error!(
                         "Error running program {}: {error}",
                         program.to_string().italic()
                     );

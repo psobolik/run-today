@@ -5,8 +5,9 @@
 
 use crate::config;
 use crate::config::program::Program;
+use crate::{print_error, print_info};
 
-pub fn do_it(program_id: usize) -> u8 {
+pub fn remove(program_id: usize) -> u8 {
     let programs = config::load_programs();
     match program_with_id(program_id, &programs) {
         Some(program) => {
@@ -17,17 +18,17 @@ pub fn do_it(program_id: usize) -> u8 {
                 .collect();
             match config::store_programs(&filtered) {
                 Ok(_) => {
-                    crate::print_info!(r#"Removed program: "{program}""#);
+                    print_info!(r#"Removed program: "{program}""#);
                     0
                 }
                 Err(error) => {
-                    crate::print_error!(r#"Error removing program: "{error}""#);
+                    print_error!(r#"Error removing program: "{error}""#);
                     1
                 }
             }
         }
         None => {
-            crate::print_error!("Invalid program ID: {program_id}");
+            print_error!("Invalid program ID: {program_id}");
             1
         }
     }

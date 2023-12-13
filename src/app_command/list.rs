@@ -4,11 +4,12 @@
  */
 
 use crate::config;
+use crate::print_info;
 
-pub fn do_it() {
+pub fn list() {
     let programs = config::load_programs();
     if programs.is_empty() {
-        crate::print_info!("No programs to list")
+        print_info!("No programs to list")
     } else {
         for program in programs {
             println!("[{}] {program}", program.id());

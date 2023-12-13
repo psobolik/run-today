@@ -13,10 +13,12 @@ use directories::UserDirs;
 use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
 
-const CONFIG_PATH: &str = ".config";
-const CONFIG_APP: &str = "run-today";
-const PROGRAMS_FILE: &str = "programs.json";
-const LAST_RUN_FILE: &str = "last-run.json";
+mod consts {
+    pub const CONFIG_PATH: &str = ".config";
+    pub const CONFIG_APP: &str = "run-today";
+    pub const PROGRAMS_FILE: &str = "programs.json";
+    pub const LAST_RUN_FILE: &str = "last-run.json";
+}
 
 pub fn load_programs() -> Vec<Program> {
     if let Some(config_path) = config_path() {
@@ -57,7 +59,7 @@ pub fn store_last_run(last_run: &Option<DateTime<Local>>) -> Result<(), Error> {
 fn config_path() -> Option<PathBuf> {
     UserDirs::new().map(|user_dirs| {
         Path::new(user_dirs.home_dir())
-            .join(CONFIG_PATH)
-            .join(CONFIG_APP)
+            .join(consts::CONFIG_PATH)
+            .join(consts::CONFIG_APP)
     })
 }
