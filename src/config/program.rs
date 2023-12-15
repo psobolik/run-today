@@ -17,13 +17,13 @@ impl Program {
     pub fn new(id: usize, name: &str, args: Option<Vec<String>>) -> Program {
         Program {
             id,
-            name: String::from(name),
+            name: name.to_owned(),
             args: args.to_owned(),
         }
     }
 
     pub fn from_string(value: String) -> Result<Program, &'static str> {
-        let mut words = value.split(' ');
+        let mut words = value.split_whitespace();
         if let Some(name) = words.next() {
             let rest: Vec<&str> = words.collect();
             let args: Option<Vec<String>> = if !rest.is_empty() {
@@ -52,12 +52,12 @@ impl Program {
 
 impl Display for Program {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let mut result = self.name.to_string();
+        write!(f, "{}", self.name)?;
         if let Some(args) = self.args() {
             for arg in args {
-                result.push_str(format!(" {arg}").as_str());
+                write!(f, " {}", arg)?;
             }
         }
-        write!(f, "{result}")
+        Ok(())
     }
 }

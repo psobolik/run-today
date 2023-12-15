@@ -14,7 +14,7 @@ pub fn load(path: &Path) -> Option<DateTime<Local>> {
     if let Ok(mut file) = File::open(path.join(consts::LAST_RUN_FILE)) {
         let mut json = String::new();
         let _ = file.read_to_string(&mut json);
-        if let Ok(result) = serde_json5::from_str(&json) {
+        if let Ok(result) = serde_json::from_str(&json) {
             result
         } else {
             panic!("Error loading last run data");
@@ -26,7 +26,7 @@ pub fn load(path: &Path) -> Option<DateTime<Local>> {
 
 pub fn store(last_run: &Option<DateTime<Local>>, path: &Path) -> Result<(), Error> {
     let mut file = File::create(path.join(consts::LAST_RUN_FILE))?;
-    if let Ok(json) = serde_json5::to_string(&last_run) {
+    if let Ok(json) = serde_json::to_string(&last_run) {
         write!(file, "{}", json)
     } else {
         Err(Error::new(

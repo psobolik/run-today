@@ -11,7 +11,7 @@ pub fn list() {
     if programs.is_empty() {
         print_info!("No programs to list")
     } else {
-        for program in programs {
+        for program in &programs {
             println!("[{}] {program}", program.id());
         }
     }

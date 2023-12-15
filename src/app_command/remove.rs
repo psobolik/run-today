@@ -14,7 +14,8 @@ pub fn remove(program_id: usize) -> u8 {
             let filtered: Vec<Program> = programs
                 .iter()
                 .filter(|program| program.id() != program_id)
-                .map(|program| Program::new(0, program.name(), program.args()))
+                // .map(|program| Program::new(0, program.name(), program.args()))
+                .cloned()
                 .collect();
             match config::store_programs(&filtered) {
                 Ok(_) => {
