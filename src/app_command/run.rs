@@ -9,7 +9,7 @@ use crate::{print_error, print_info};
 use chrono::{DateTime, Datelike, Local};
 use colored::Colorize;
 
-pub fn run(no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
+pub fn run(force: bool, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
     // Returns 0 if no errors
     // 1 if the last run can't be stored
     // 2 + the number of programs that failed, if any failed
@@ -20,7 +20,7 @@ pub fn run(no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
         print_info!("Run Today");
         print_info!("Last run: {}", format_last_run(last_run));
     }
-    if should_run(last_run) {
+    if force || should_run(last_run) {
         exit_code = run_programs(&config::load_programs(), no_stdout, no_stderr, verbose);
         exit_code += update_last_run();
     } else if verbose {

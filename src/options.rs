@@ -18,6 +18,9 @@ pub struct Options {
 pub(crate) enum Commands {
     /// Run each program in the list if this program hasn't been run today
     Run {
+        #[arg(long, help = "Run programs without regard for when this program was last run")]
+        force: bool,
+
         #[arg(long, help = "Don't print program output")]
         no_stdout: bool,
 

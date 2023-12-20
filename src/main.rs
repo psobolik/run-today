@@ -19,10 +19,11 @@ fn main() -> ExitCode {
     let options = Options::parse();
     match options.command {
         Commands::Run {
+            force,
             no_stdout,
             no_stderr,
             verbose,
-        } => exit_code = run(no_stdout, no_stderr, verbose),
+        } => exit_code = run(force, no_stdout, no_stderr, verbose),
         Commands::List => list(),
         Commands::LastRun => last_run(),
         Commands::Add { program } => {
