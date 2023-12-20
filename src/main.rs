@@ -11,7 +11,6 @@ use crate::options::{Commands, Options};
 use app_command::{add::add, last_run::last_run, list::list, remove::remove, run::run};
 use clap::Parser;
 use std::process::ExitCode;
-// use colored::Colorize;
 
 fn main() -> ExitCode {
     let mut exit_code: u8 = 0;

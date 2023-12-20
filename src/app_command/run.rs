@@ -17,6 +17,7 @@ pub fn run(no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
 
     let last_run = config::load_last_run();
     if verbose {
+        print_info!("Run Today");
         print_info!("Last run: {}", format_last_run(last_run));
     }
     if should_run(last_run) {
