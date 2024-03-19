@@ -11,11 +11,9 @@ use std::path::Path;
 
 pub fn load(path: &Path) -> Vec<Program> {
     match File::open(path.join(consts::PROGRAMS_FILE)) {
-        Ok(file) => {
-            match serde_json::from_reader(BufReader::new(file)) {
-                Ok(programs) => programs,
-                Err(error) => panic!("Error loading programs: {}", error),
-            }
+        Ok(file) => match serde_json::from_reader(BufReader::new(file)) {
+            Ok(programs) => programs,
+            Err(error) => panic!("Error loading programs: {}", error),
         },
         Err(_) => vec![],
     }

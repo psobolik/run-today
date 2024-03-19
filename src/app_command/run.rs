@@ -3,11 +3,11 @@
  * Created 2023-12-09
  */
 
-use crate::app_command::last_run::format_last_run;
+use crate::colored::Colorize;
 use crate::config::{self, program::Program};
+use crate::last_run;
 use crate::{print_error, print_info};
 use chrono::{DateTime, Datelike, Local};
-use colored::Colorize;
 
 pub fn run(force: bool, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
     // Returns 0 if no errors
@@ -18,7 +18,7 @@ pub fn run(force: bool, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
     let last_run = config::load_last_run();
     if verbose {
         print_info!("Run Today");
-        print_info!("Last run: {}", format_last_run(last_run));
+        print_info!("Last run: {}", last_run::format_last_run(last_run));
     }
     if force || should_run(last_run) {
         exit_code = run_programs(&config::load_programs(), no_stdout, no_stderr, verbose);

@@ -6,11 +6,14 @@
 mod app_command;
 mod config;
 mod options;
+mod macros;
 
 use crate::options::{Commands, Options};
-use app_command::{add::add, last_run::last_run, list::list, remove::remove, run::run};
+use app_command::{add, last_run, list, remove, run};
 use clap::Parser;
 use std::process::ExitCode;
+
+pub extern crate colored;
 
 fn main() -> ExitCode {
     let mut exit_code: u8 = 0;
@@ -23,35 +26,17 @@ fn main() -> ExitCode {
             no_stdout,
             no_stderr,
             verbose,
-        } => exit_code = run(force, no_stdout, no_stderr, verbose),
-        Commands::List => list(),
-        Commands::LastRun => last_run(),
+        } => exit_code = run::run(force, no_stdout, no_stderr, verbose),
+        Commands::List => list::list(),
+        Commands::LastRun => last_run::last_run(),
         Commands::Add { program } => {
-            exit_code = add(program);
-            list();
+            exit_code = add::add(program);
+            list::list();
         }
         Commands::Remove { id } => {
-            exit_code = remove(id);
-            list();
+            exit_code = remove::remove(id);
+            list::list();
         }
     }
     ExitCode::from(exit_code)
-}
-
-pub extern crate colored;
-
-#[macro_export]
-macro_rules! print_info {
-    ($($arg:tt)*) => {{
-        let message = format!($($arg)*);
-        println!("{} {message}", $crate::colored::Colorize::bright_green("->"))
-    }};
-}
-
-#[macro_export]
-macro_rules! print_error {
-    ($($arg:tt)*) => {{
-        let message = format!($($arg)*);
-        eprintln!("{} {message}", $crate::colored::Colorize::bright_red("->"))
-    }};
 }
