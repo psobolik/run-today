@@ -5,6 +5,7 @@
 
 use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
+use unicode_segmentation::UnicodeSegmentation;
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Program {
@@ -22,18 +23,39 @@ impl Program {
         }
     }
 
+    pub fn parse_value(value: String) -> Vec<String> {
+        let mut parts: Vec<String> = vec![];
+        let mut acc: Vec<&str> = vec![];
+        let mut in_quotes = false;
+        for g in value.graphemes(true) {
+            if g == "'" {
+                in_quotes = !in_quotes;
+            } else if in_quotes {
+                acc.push(g);
+            } else if g == " " {
+                // Unquoted space starts a new part
+                parts.push(acc.join("").to_string());
+                acc = vec![];
+            } else {
+                acc.push(g);
+            }
+        }
+        if !acc.is_empty() {
+            parts.push(acc.join("").to_string());
+        }
+        parts
+    }
     pub fn from_string(value: String) -> Result<Program, &'static str> {
-        let mut words = value.split_whitespace();
-        if let Some(name) = words.next() {
-            let rest: Vec<&str> = words.collect();
-            let args: Option<Vec<String>> = if !rest.is_empty() {
-                Some(rest.iter().map(|f| f.trim().to_string()).collect())
+        let parts = Self::parse_value(value);
+        if parts.is_empty() {
+            Err("Can't parse input")
+        } else {
+            let args = if parts.len() > 1 {
+                Some(parts[1..].to_vec())
             } else {
                 None
             };
-            Ok(Program::new(0, name, args))
-        } else {
-            Err("Can't parse program string")
+            Ok(Program::new(0, parts[0].as_str(), args))
         }
     }
 
