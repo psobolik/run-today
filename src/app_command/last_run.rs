@@ -3,18 +3,10 @@
  * Created 2023-12-09
  */
 
-use crate::{config, print_info};
-use chrono::{DateTime, Local};
+use crate::print_info;
+use crate::data::last_run;
 
 pub fn last_run() {
-    let last_run = config::load_last_run();
-    print_info!("Last run: {}", format_last_run(last_run));
-}
-
-pub fn format_last_run(last_run: Option<DateTime<Local>>) -> String {
-    if let Some(lr) = last_run {
-        lr.format("%F %R").to_string()
-    } else {
-        String::from("Never")
-    }
+    let last_run = last_run::load();
+    print_info!("Last run: {}", last_run::format_last_run(last_run));
 }

@@ -4,8 +4,7 @@
  */
 
 use crate::colored::Colorize;
-use crate::config::{self, program::Program};
-use crate::last_run;
+use crate::data::{program::Program, programs, last_run};
 use crate::{print_error, print_info};
 use chrono::{DateTime, Datelike, Local};
 
@@ -15,13 +14,13 @@ pub fn run(force: bool, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
     // 2 + the number of programs that failed, if any failed
     let mut exit_code: u8 = 0;
 
-    let last_run = config::load_last_run();
+    let last_run = last_run::load();
     if verbose {
         print_info!("Run Today");
         print_info!("Last run: {}", last_run::format_last_run(last_run));
     }
     if force || should_run(last_run) {
-        exit_code = run_programs(&config::load_programs(), no_stdout, no_stderr, verbose);
+        exit_code = run_programs(&programs::load(), no_stdout, no_stderr, verbose);
         exit_code += update_last_run();
     } else if verbose {
         print_info!("Doing nothing (already run today)");
@@ -30,7 +29,7 @@ pub fn run(force: bool, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
 }
 
 fn update_last_run() -> u8 {
-    match config::store_last_run(&Some(Local::now())) {
+    match last_run::store(&Some(Local::now())) {
         Ok(_) => 0,
         Err(_) => 1,
     }

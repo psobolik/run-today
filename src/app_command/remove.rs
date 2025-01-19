@@ -3,12 +3,12 @@
  * Created 2023-12-10
  */
 
-use crate::config;
-use crate::config::program::Program;
+use crate::data::program::Program;
 use crate::{print_error, print_info};
+use crate::data::programs;
 
 pub fn remove(program_id: usize) -> u8 {
-    let programs = config::load_programs();
+    let programs = programs::load();
     match program_with_id(program_id, &programs) {
         Some(program) => {
             let filtered: Vec<Program> = programs
@@ -17,7 +17,7 @@ pub fn remove(program_id: usize) -> u8 {
                 // .map(|program| Program::new(0, program.name(), program.args()))
                 .cloned()
                 .collect();
-            match config::store_programs(&filtered) {
+            match programs::store(&filtered) {
                 Ok(_) => {
                     print_info!(r#"Removed program: "{program}""#);
                     0

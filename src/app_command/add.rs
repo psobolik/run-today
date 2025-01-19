@@ -3,21 +3,22 @@
  * Created 2023-12-10
  */
 
-use crate::config;
-use crate::config::program::Program;
+// use crate::data;
+use crate::data::programs;
+use crate::data::program::Program;
 use crate::{print_error, print_info};
 
 pub fn add(string: String) -> u8 {
     match Program::from_string(string) {
         Ok(program) => {
-            let mut programs = config::load_programs();
+            let mut programs = programs::load();
             if !is_unique(&program, &programs) {
                 print_error!(r#"Won't add duplicate program: "{program}""#);
                 return 1;
             }
             let message = format!(r#"Added program: "{program}""#);
             programs.push(program);
-            match config::store_programs(&programs) {
+            match programs::store(&programs) {
                 Ok(_) => {
                     print_info!("{message}");
                     0

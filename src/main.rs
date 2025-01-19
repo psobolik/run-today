@@ -4,7 +4,7 @@
  */
 
 mod app_command;
-mod config;
+mod data;
 mod options;
 mod macros;
 
