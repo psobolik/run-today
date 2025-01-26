@@ -8,21 +8,21 @@ use crate::data::{program::Program, programs, last_run};
 use crate::{print_error, print_info};
 use chrono::{DateTime, Datelike, Local};
 
-pub fn run(force: bool, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
+pub fn run(force: bool, no_stdout: bool, no_stderr: bool, quiet: bool) -> u8 {
     // Returns 0 if no errors
     // 1 if the last run can't be stored
     // 2 + the number of programs that failed, if any failed
     let mut exit_code: u8 = 0;
 
     let last_run = last_run::load();
-    if verbose {
+    if !quiet {
         print_info!("Run Today");
         print_info!("Last run: {}", last_run::format_last_run(last_run));
     }
     if force || should_run(last_run) {
-        exit_code = run_programs(&programs::load(), no_stdout, no_stderr, verbose);
+        exit_code = run_programs(&programs::load(), no_stdout, no_stderr, quiet);
         exit_code += update_last_run();
-    } else if verbose {
+    } else if !quiet {
         print_info!("Doing nothing (already run today)");
     }
     exit_code
@@ -47,11 +47,11 @@ fn should_run(option: Option<DateTime<Local>>) -> bool {
     }
 }
 
-fn run_programs(programs: &Vec<Program>, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
-    fn run_program(program: &Program, no_stdout: bool, no_stderr: bool, verbose: bool) -> u8 {
+fn run_programs(programs: &Vec<Program>, no_stdout: bool, no_stderr: bool, quiet: bool) -> u8 {
+    fn run_program(program: &Program, no_stdout: bool, no_stderr: bool, quiet: bool) -> u8 {
         let mut exit_code = 0;
 
-        if verbose {
+        if !quiet {
             print_info!("Running {}", program.to_string().italic());
         }
 
@@ -76,7 +76,7 @@ fn run_programs(programs: &Vec<Program>, no_stdout: bool, no_stderr: bool, verbo
                 }
             }
             Err(error) => {
-                if verbose {
+                if !quiet {
                     print_error!(
                         "Error running program {}: {error}",
                         program.to_string().italic()
@@ -90,7 +90,7 @@ fn run_programs(programs: &Vec<Program>, no_stdout: bool, no_stderr: bool, verbo
 
     let mut errors = 0;
     for program in programs {
-        errors += run_program(program, no_stdout, no_stderr, verbose);
+        errors += run_program(program, no_stdout, no_stderr, quiet);
     }
     if errors > 0 {
         errors + 2

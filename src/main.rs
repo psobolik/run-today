@@ -25,8 +25,8 @@ fn main() -> ExitCode {
             force,
             no_stdout,
             no_stderr,
-            verbose,
-        } => exit_code = run::run(force, no_stdout, no_stderr, verbose),
+            quiet,
+        } => exit_code = run::run(force, no_stdout, no_stderr, quiet),
         Commands::List => list::list(),
         Commands::LastRun => last_run::last_run(),
         Commands::Add { program } => {

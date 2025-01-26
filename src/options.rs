@@ -30,8 +30,8 @@ pub(crate) enum Commands {
         #[arg(long, help = "Don't print program errors")]
         no_stderr: bool,
 
-        #[arg(short, long, help = "Display additional information")]
-        verbose: bool,
+        #[arg(short, long, help = "Don't print additional information")]
+        quiet: bool,
     },
     /// Print the last time this program was run
     LastRun,
