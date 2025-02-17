@@ -9,7 +9,7 @@ mod options;
 mod macros;
 
 use crate::options::{Commands, Options};
-use app_command::{add, last_run, list, remove, run};
+use app_command::{do_add_command, do_last_run_command, do_list_command, do_remove_command, do_run_command};
 use clap::Parser;
 use std::process::ExitCode;
 
@@ -26,16 +26,16 @@ fn main() -> ExitCode {
             no_stdout,
             no_stderr,
             quiet,
-        } => exit_code = run::run(force, no_stdout, no_stderr, quiet),
-        Commands::List => list::list(),
-        Commands::LastRun => last_run::last_run(),
+        } => exit_code = do_run_command(force, no_stdout, no_stderr, quiet),
+        Commands::List => do_list_command(),
+        Commands::LastRun => do_last_run_command(),
         Commands::Add { program } => {
-            exit_code = add::add(program);
-            list::list();
+            exit_code = do_add_command(program);
+            do_list_command();
         }
         Commands::Remove { id } => {
-            exit_code = remove::remove(id);
-            list::list();
+            exit_code = do_remove_command(id);
+            do_list_command();
         }
     }
     ExitCode::from(exit_code)

@@ -4,38 +4,34 @@
  */
 
 use crate::colored::Colorize;
-use crate::data::{program::Program, programs, last_run};
+use crate::data::{last_run::LastRun, program::Program, programs};
 use crate::{print_error, print_info};
 use chrono::{DateTime, Datelike, Local};
 
-pub fn run(force: bool, no_stdout: bool, no_stderr: bool, quiet: bool) -> u8 {
+pub fn command(force: bool, no_stdout: bool, no_stderr: bool, quiet: bool) -> u8 {
     // Returns 0 if no errors
     // 1 if the last run can't be stored
     // 2 + the number of programs that failed, if any failed
     let mut exit_code: u8 = 0;
 
-    let last_run = last_run::load();
+    let last_run = LastRun::new();
     if !quiet {
         print_info!("Run Today");
-        print_info!("Last run: {}", last_run::format_last_run(last_run));
+        print_info!("Last run: {}", last_run);
     }
-    if force || should_run(last_run) {
+    if force || should_run(&last_run.clone().last_run()) {
         exit_code = run_programs(&programs::load(), no_stdout, no_stderr, quiet);
-        exit_code += update_last_run();
+        exit_code += match last_run.store(&Some(Local::now())) {
+            Ok(_) => 0,
+            Err(_) => 1,
+        }
     } else if !quiet {
         print_info!("Doing nothing (already run today)");
     }
     exit_code
 }
 
-fn update_last_run() -> u8 {
-    match last_run::store(&Some(Local::now())) {
-        Ok(_) => 0,
-        Err(_) => 1,
-    }
-}
-
-fn should_run(option: Option<DateTime<Local>>) -> bool {
+fn should_run(option: &Option<DateTime<Local>>) -> bool {
     // Assumes last day option isn't in the future
     if let Some(last_run) = option {
         let now = Local::now();

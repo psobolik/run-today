@@ -6,7 +6,7 @@
 use crate::data::programs;
 use crate::print_info;
 
-pub fn list() {
+pub fn command() {
     let programs = programs::load();
     if programs.is_empty() {
         print_info!("No programs to list")

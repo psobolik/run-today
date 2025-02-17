@@ -8,7 +8,7 @@ use crate::data::programs;
 use crate::data::program::Program;
 use crate::{print_error, print_info};
 
-pub fn add(string: String) -> u8 {
+pub fn command(string: String) -> u8 {
     match Program::from_string(string) {
         Ok(program) => {
             let mut programs = programs::load();

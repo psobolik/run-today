@@ -8,7 +8,7 @@ use clap::{Parser, Subcommand};
 #[derive(Parser)]
 #[command(
     version,
-    long_about("Runs a list of programs if this program hasn't been run today")
+    long_about("Runs a list of programs no more than once a day")
 )]
 pub struct Options {
     #[command(subcommand)]

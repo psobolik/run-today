@@ -74,7 +74,11 @@ impl Program {
 
 impl Display for Program {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name)?;
+        if self.name.contains(" ") {
+            write!(f, "\"{}\"", self.name)?;
+        } else {
+            write!(f, "{}", self.name)?;
+        };
         if let Some(args) = self.args() {
             for arg in args {
                 write!(f, " {}", arg)?;

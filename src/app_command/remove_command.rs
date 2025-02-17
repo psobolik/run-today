@@ -7,7 +7,7 @@ use crate::data::program::Program;
 use crate::{print_error, print_info};
 use crate::data::programs;
 
-pub fn remove(program_id: usize) -> u8 {
+pub fn command(program_id: usize) -> u8 {
     let programs = programs::load();
     match program_with_id(program_id, &programs) {
         Some(program) => {
