@@ -4,11 +4,11 @@
  */
 
 use crate::data::program::Program;
+use crate::data::programs::Programs;
 use crate::{print_error, print_info};
-use crate::data::programs;
 
 pub fn command(program_id: usize) -> u8 {
-    let programs = programs::load();
+    let programs = Programs::load();
     match program_with_id(program_id, &programs) {
         Some(program) => {
             let filtered: Vec<Program> = programs
@@ -17,7 +17,7 @@ pub fn command(program_id: usize) -> u8 {
                 // .map(|program| Program::new(0, program.name(), program.args()))
                 .cloned()
                 .collect();
-            match programs::store(&filtered) {
+            match Programs::store(&filtered) {
                 Ok(_) => {
                     print_info!(r#"Removed program: "{program}""#);
                     0

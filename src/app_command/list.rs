@@ -3,11 +3,11 @@
  * Created 2023-12-09
  */
 
-use crate::data::programs;
+use crate::data::programs::Programs;
 use crate::print_info;
 
 pub fn command() {
-    let programs = programs::load();
+    let programs = Programs::load();
     if programs.is_empty() {
         print_info!("No programs to list")
     } else {

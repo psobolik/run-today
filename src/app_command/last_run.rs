@@ -3,10 +3,9 @@
  * Created 2023-12-09
  */
 
-use crate::print_info;
 use crate::data::last_run::LastRun;
+use crate::print_info;
 
 pub fn command() {
-    let last_run = LastRun::new();
-    print_info!("Last run: {}", last_run);
+    print_info!("Last run: {}", LastRun::display());
 }

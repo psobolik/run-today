@@ -6,10 +6,7 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(
-    version,
-    long_about("Runs a list of programs no more than once a day")
-)]
+#[command(version, long_about("Runs a list of programs no more than once a day"))]
 pub struct Options {
     #[command(subcommand)]
     pub(crate) command: Commands,
@@ -49,4 +46,7 @@ pub(crate) enum Commands {
         #[arg(required = true)]
         id: usize,
     },
+    /// Print information about the app
+    #[command()]
+    Info,
 }
