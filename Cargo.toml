@@ -1,6 +1,6 @@
 [package]
 name = "run-today"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Paul Sobolik <psobolik@zoho.com>"]
 description = "Runs a list of programs no more than once a day"
 license = "MIT"
@@ -14,3 +14,10 @@ serde_json = "1.0.136"
 clap = { version = "4.5.26", features = ["derive"] }
 colored = "3.0.0"
 unicode-segmentation = "1.12.0"
+
+[profile.release]
+opt-level = 'z'     # Optimize for size
+lto = true          # Enable link-time optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations
+panic = 'abort'     # Abort on panic
+strip = true        # Strip symbols from binary

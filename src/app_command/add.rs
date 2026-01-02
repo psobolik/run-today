@@ -2,13 +2,12 @@
  * Copyright (c) 2023 Paul Sobolik
  * Created 2023-12-10
  */
-
 use crate::data::program::Program;
 use crate::data::programs::Programs;
 use crate::{print_error, print_info};
 
-pub fn command(string: String) -> u8 {
-    match Program::from_string(string) {
+pub fn command(program_string: String) -> u8 {
+    match program_string.try_into() {
         Ok(program) => {
             let mut programs = Programs::load();
             if !is_unique(&program, &programs) {
@@ -29,7 +28,7 @@ pub fn command(string: String) -> u8 {
             }
         }
         Err(error) => {
-            print_error!(r#"Error parsing program: "{error}""#);
+            print_error!(r#"Error parsing program string: "{error}""#);
             1
         }
     }
