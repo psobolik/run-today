@@ -1,6 +1,6 @@
 [package]
 name = "run-today"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Paul Sobolik <psobolik@zoho.com>"]
 description = "Runs a list of programs no more than once a day"
 license = "MIT"
