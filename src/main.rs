@@ -31,7 +31,7 @@ fn main() -> ExitCode {
         } => exit_code = run(force, no_stdout, no_stderr, quiet),
         Commands::List => list(),
         Commands::LastRun => last_run(),
-        Commands::Add { program } => {
+        Commands::Add { command: program } => {
             exit_code = add(program);
             list();
         }
